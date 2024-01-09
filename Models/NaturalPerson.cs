@@ -20,5 +20,6 @@ namespace bankingApplication_API.Models
         public string email { get; set; }
         public string? password { get; set; }
         public int verificationToken { get; set; }
+        public long? nip { get; set; }
     }
 }

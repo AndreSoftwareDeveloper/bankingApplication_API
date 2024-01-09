@@ -58,11 +58,21 @@ namespace bankingApplication_API.Controllers
             var naturalPerson = _mapper.Map<NaturalPerson>(naturalPersonDto);
             _naturalPersonInterface.CreateNaturalPerson(naturalPerson);
             string message = await CeigdInformationService.CallCeidgApi();
-            SendConfigurationMessage();
+            int verificationToken = naturalPersonDto.verificationToken;
+            SendConfigurationMessage(verificationToken);
             return CreatedAtAction(nameof(GetNaturalPerson), new { id = naturalPerson.id }, naturalPerson);
         }
 
-        private void SendConfigurationMessage()
+        [HttpPost("Setup")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public IActionResult SetupNaturalPersonData(int verificationToken, string newPassword, long nip)
+        {
+            var updatedPerson = _naturalPersonInterface.SetupNaturalPersonData(verificationToken, newPassword, nip);
+            return Ok(updatedPerson);
+        }
+
+        private void SendConfigurationMessage(int verificationToken)
         {
             string header = "Prośba o Uzupełnienie Danych w Celu Aktywacji Konta w TwójBank";
             string message = $"Szanowny Kliencie,\n" +
@@ -70,7 +80,7 @@ namespace bankingApplication_API.Controllers
                 "W celu zabezpieczenia Twojego konta, zalecamy natychmiastową zmianę tymczasowego hasła przydzielonego podczas rejestracji.\n" +
                 "Ponadto, w celu dokończenia procesu rejestracji, prosimy o podanie numeru NIP i REGON. Te informacje są niezbędne do pełnej aktywacji Twojego konta.\n" +
                 "Proszę użyj poniższego linku do uzupełnienia powyższych danych:\n" +
-                "Link do uzupełnienia danych: https://www.mojastrona.pl\n" +
+                "Link do uzupełnienia danych: http://localhost:8100/set_up_data?verificationToken=" + verificationToken + "\n\n" +
                 "Proszę pamiętać, że link będzie aktywny przez 48 godzin od chwili wysłania tego e-maila. Po tym okresie będziesz musiał(a) skontaktować się z nami w celu uzyskania nowego linku.\n\n" +
                 "Twoje bezpieczeństwo jest dla nas priorytetem, dlatego wykorzystujemy szyfrowane połączenia, aby zapewnić bezpieczeństwo Twoich danych.\n" +
                 "Dziękujemy za zaufanie i wybór TwójBank. Jesteśmy gotowi służyć Ci najlepszymi usługami finansowymi.\n" +
@@ -78,7 +88,7 @@ namespace bankingApplication_API.Controllers
                 "Pozdrawiamy,\n" +
                 "Zespół TwójBank";
 
-            EmailMessageService.SendCeidgInfo(header, message);
+            EmailMessageService.SendEmail(header, message);
         }
     }
 }

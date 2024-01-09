@@ -19,5 +19,6 @@ namespace bankingApplication_API.Dto
         public string Email { get; set; }
         public string? Password { get; set; }
         public int verificationToken { get; set; } = VerificationTokenGenerator.GenerateVerificationToken();
+        public long? nip { get; set; } = null;
     }
 }

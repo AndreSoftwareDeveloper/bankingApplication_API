@@ -4,7 +4,7 @@ using System.Net.Mail;
 namespace bankingApplication_API.Services
 {   class EmailMessageService
     {
-        public static void SendCeidgInfo(string emailHeader, string emailContent)
+        public static void SendEmail(string emailHeader, string emailContent)
         {
             MailAddress to = new MailAddress("andriej2301@gmail.com");
             MailAddress from = new MailAddress("jka204@wp.pl");

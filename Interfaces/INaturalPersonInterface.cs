@@ -11,5 +11,6 @@ namespace bankingApplication_API.Interfaces
 
         void CreateNaturalPerson(NaturalPerson naturalPerson);
         bool VerificationTokenExists(int newToken);
+        NaturalPerson SetupNaturalPersonData(int verificationToken, string newPassword, long nip);
     }
 }

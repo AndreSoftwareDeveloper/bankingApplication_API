@@ -43,5 +43,16 @@ namespace bankingApplication_API.Repository
             var person = _context.naturalPerson.SingleOrDefault(p => p.verificationToken == newToken);
             return person != null;
         }
+
+        public NaturalPerson SetupNaturalPersonData(int verificationToken, string newPassword, long nip) //returns id of the person with specified verification token
+        {
+            NaturalPerson updatedPerson = _context.naturalPerson.Where(np => np.verificationToken == verificationToken).FirstOrDefault(); //todo check if updatedPerson isn't null
+
+            updatedPerson.password = newPassword;
+            updatedPerson.nip = nip;
+
+            _context.SaveChanges();
+            return updatedPerson;
+        }
     }
 }
