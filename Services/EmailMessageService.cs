@@ -19,7 +19,7 @@ namespace bankingApplication_API.Services
             smtp.UseDefaultCredentials = false;
             smtp.Port = 587;
             smtp.EnableSsl = true;
-            smtp.Credentials = new NetworkCredential("jka204@wp.pl", "szCZepionka70%");
+            smtp.Credentials = new NetworkCredential("jka204@wp.pl", "kYeUUpino5878=");
             //smtp.Credentials = new NetworkCredential("murzyn448@gmail.com", "Bitcoinminer");
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
 

@@ -63,12 +63,12 @@ namespace bankingApplication_API.Controllers
             return CreatedAtAction(nameof(GetNaturalPerson), new { id = naturalPerson.id }, naturalPerson);
         }
 
-        [HttpPost("Setup")]
-        [ProducesResponseType(201)]
+        [HttpPut]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult SetupNaturalPersonData(int verificationToken, string newPassword, long nip)
+        public IActionResult SetupNaturalPersonData([FromBody] NaturalPersonUpdateData updateData)
         {
-            var updatedPerson = _naturalPersonInterface.SetupNaturalPersonData(verificationToken, newPassword, nip);
+            var updatedPerson = _naturalPersonInterface.SetupNaturalPersonData(updateData);
             return Ok(updatedPerson);
         }
 
@@ -78,7 +78,7 @@ namespace bankingApplication_API.Controllers
             string message = $"Szanowny Kliencie,\n" +
                 "Serdecznie witamy Cię w TwójBank! Dziękujemy za założenie konta w naszym banku. Abyś mógł pełnić korzyści z naszych usług, prosimy o kilka dodatkowych informacji.\n" +
                 "W celu zabezpieczenia Twojego konta, zalecamy natychmiastową zmianę tymczasowego hasła przydzielonego podczas rejestracji.\n" +
-                "Ponadto, w celu dokończenia procesu rejestracji, prosimy o podanie numeru NIP i REGON. Te informacje są niezbędne do pełnej aktywacji Twojego konta.\n" +
+                "Ponadto, w celu dokończenia procesu rejestracji, prosimy o podanie numeru NIP. Ta informacja jest niezbędna do pełnej aktywacji Twojego konta.\n" +
                 "Proszę użyj poniższego linku do uzupełnienia powyższych danych:\n" +
                 "Link do uzupełnienia danych: http://localhost:8100/set_up_data?verificationToken=" + verificationToken + "\n\n" +
                 "Proszę pamiętać, że link będzie aktywny przez 48 godzin od chwili wysłania tego e-maila. Po tym okresie będziesz musiał(a) skontaktować się z nami w celu uzyskania nowego linku.\n\n" +

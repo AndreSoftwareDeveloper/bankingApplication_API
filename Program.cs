@@ -10,10 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowOrigin",
-        builder => builder.WithOrigins("http://localhost:8100")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod());
+    options.AddPolicy("AllowAny",
+            builder => builder.AllowAnyOrigin()
+                              .AllowAnyHeader()
+                              .AllowAnyMethod());
 });
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -39,7 +39,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-app.UseCors("AllowOrigin");
+app.UseCors("AllowAny");
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())

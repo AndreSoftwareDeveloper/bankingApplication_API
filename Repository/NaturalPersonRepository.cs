@@ -44,12 +44,13 @@ namespace bankingApplication_API.Repository
             return person != null;
         }
 
-        public NaturalPerson SetupNaturalPersonData(int verificationToken, string newPassword, long nip) //returns id of the person with specified verification token
+        public NaturalPerson SetupNaturalPersonData(NaturalPersonUpdateData updateData) //returns id of the person with specified verification token
         {
-            NaturalPerson updatedPerson = _context.naturalPerson.Where(np => np.verificationToken == verificationToken).FirstOrDefault(); //todo check if updatedPerson isn't null
+            NaturalPerson updatedPerson = _context.naturalPerson.Where(np => np.verificationToken == updateData.verificationToken).FirstOrDefault(); //todo check if updatedPerson isn't null
 
-            updatedPerson.password = newPassword;
-            updatedPerson.nip = nip;
+            updatedPerson.password = updateData.newPassword;
+            updatedPerson.nip = updateData.nip;
+            updatedPerson.regon = updateData.regon;
 
             _context.SaveChanges();
             return updatedPerson;

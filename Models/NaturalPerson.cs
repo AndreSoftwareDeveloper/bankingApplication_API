@@ -21,5 +21,6 @@ namespace bankingApplication_API.Models
         public string? password { get; set; }
         public int verificationToken { get; set; }
         public long? nip { get; set; }
+        public long? regon { get; set; }
     }
 }
