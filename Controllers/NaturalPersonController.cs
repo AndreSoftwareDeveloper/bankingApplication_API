@@ -57,10 +57,12 @@ namespace bankingApplication_API.Controllers
 
             var naturalPerson = _mapper.Map<NaturalPerson>(naturalPersonDto);
             _naturalPersonInterface.CreateNaturalPerson(naturalPerson);
-            string message = await CeigdInformationService.CallCeidgApi();
+
+            string ceidgInfo = await CeigdInformationService.CallCeidgApi();
+
             int verificationToken = naturalPersonDto.verificationToken;
-            SendConfigurationMessage(verificationToken);
-            return CreatedAtAction(nameof(GetNaturalPerson), new { id = naturalPerson.id }, naturalPerson);
+            SendConfigurationMessage(verificationToken, ceidgInfo);
+            return CreatedAtAction(nameof(GetNaturalPerson), new { naturalPerson.id }, naturalPerson);
         }
 
         [HttpPut]
@@ -72,20 +74,23 @@ namespace bankingApplication_API.Controllers
             return Ok(updatedPerson);
         }
 
-        private void SendConfigurationMessage(int verificationToken)
+        private void SendConfigurationMessage(int verificationToken, string ceidgInfo)
         {
             string header = "Prośba o Uzupełnienie Danych w Celu Aktywacji Konta w TwójBank";
             string message = $"Szanowny Kliencie,\n" +
                 "Serdecznie witamy Cię w TwójBank! Dziękujemy za założenie konta w naszym banku. Abyś mógł pełnić korzyści z naszych usług, prosimy o kilka dodatkowych informacji.\n" +
                 "W celu zabezpieczenia Twojego konta, zalecamy natychmiastową zmianę tymczasowego hasła przydzielonego podczas rejestracji.\n" +
-                "Ponadto, w celu dokończenia procesu rejestracji, prosimy o podanie numeru NIP. Ta informacja jest niezbędna do pełnej aktywacji Twojego konta.\n" +
+                "Ponadto, w celu dokończenia procesu rejestracji, prosimy o podanie numeru NIP. Jeśli prowadzisz działalność gospodarczą, podaj również REGON.\n" +
+                "Te informacje są niezbędne do pełnej aktywacji Twojego konta.\n" +
                 "Proszę użyj poniższego linku do uzupełnienia powyższych danych:\n" +
                 "Link do uzupełnienia danych: http://localhost:8100/set_up_data?verificationToken=" + verificationToken + "\n\n" +
                 "Proszę pamiętać, że link będzie aktywny przez 48 godzin od chwili wysłania tego e-maila. Po tym okresie będziesz musiał(a) skontaktować się z nami w celu uzyskania nowego linku.\n\n" +
                 "Twoje bezpieczeństwo jest dla nas priorytetem, dlatego wykorzystujemy szyfrowane połączenia, aby zapewnić bezpieczeństwo Twoich danych.\n" +
                 "Dziękujemy za zaufanie i wybór TwójBank. Jesteśmy gotowi służyć Ci najlepszymi usługami finansowymi.\n" +
                 "W razie pytań lub problemów prosimy o kontakt z naszym działem obsługi klienta pod numerem [numer_telefonu] lub drogą mailową pod adresem [adres_email].\n\n" +
-                "Pozdrawiamy,\n" +
+                "Dane z CEIDG:\n" +
+                ceidgInfo +
+                "\n\nPozdrawiamy,\n" +
                 "Zespół TwójBank";
 
             EmailMessageService.SendEmail(header, message);
