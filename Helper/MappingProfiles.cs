@@ -10,6 +10,18 @@ namespace bankingApplication_API.Helper
         {
             CreateMap<NaturalPersonDto, NaturalPerson>()
                 .ForMember(dest => dest.id, opt => opt.Ignore());
+
+            CreateMap<JuridicalPersonDto, JuridicalPerson>()
+                .ForMember(dest => dest.id, opt => opt.Ignore());
+
+            CreateMap<JuridicalPersonDto, JuridicalPerson>()
+                .ForMember(dest => dest.entryKRS, opt => opt.Ignore());
+
+            CreateMap<JuridicalPersonDto, JuridicalPerson>()
+                .ForMember(dest => dest.companyAgreement, opt => opt.Ignore());
+
+            CreateMap<JuridicalPersonDto, JuridicalPerson>()
+                .ForMember(dest => dest.representativeIdScan, opt => opt.Ignore());
         }
     }
 }

@@ -7,6 +7,6 @@ namespace bankingApplication_API.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) {}
 
         public DbSet<Models.NaturalPerson> naturalPerson { get; set; }
-
+        public DbSet<Models.JuridicalPerson> juridicalPerson { get; set; }
     }
 }

@@ -22,78 +22,115 @@ namespace bankingApplication_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<NaturalPerson>))]
+        [ProducesResponseType(400)]
         public IActionResult GetNaturalPersons()
         {
-            var naturalPeople = _naturalPersonInterface.GetNaturalPersons();
+            var naturalPersons = _naturalPersonInterface.GetNaturalPersons();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(naturalPeople);
+            return Ok(naturalPersons);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet( "{id}" )]
         [ProducesResponseType(200, Type = typeof(NaturalPerson))]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public IActionResult GetNaturalPerson(int id)
         {
             if(!_naturalPersonInterface.NaturalPersonExists(id))
                 return NotFound();
 
-            var naturalPerson = _mapper.Map<NaturalPersonDto>(_naturalPersonInterface.GetNaturalPerson(id));
+            var naturalPerson = _mapper.Map<NaturalPersonDto>(_naturalPersonInterface.GetNaturalPersonByID(id));
 
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
+            return Ok(naturalPerson);
+        }
 
+        [HttpGet("customerNumber/{customerNumber}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public IActionResult FindCustomerNumber(int customerNumber)
+        {
+            NaturalPerson naturalPerson = _naturalPersonInterface.FindCustomerNumber(customerNumber);
+            if (naturalPerson == null)
+                return NotFound();
             return Ok(naturalPerson);
         }
 
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(NaturalPersonDto))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> CreateNaturalPersonAsync([FromBody] NaturalPersonDto naturalPersonDto)
+        public async Task<IActionResult> CreateNaturalPerson([FromForm] NaturalPersonDto naturalPersonDto)
         {
             if (naturalPersonDto == null)
                 return BadRequest("Invalid data.");
 
             var naturalPerson = _mapper.Map<NaturalPerson>(naturalPersonDto);
-            _naturalPersonInterface.CreateNaturalPerson(naturalPerson);
+            ICollection<NaturalPerson> naturalPersons = _naturalPersonInterface.GetNaturalPersons();
 
-            string ceidgInfo = await CeigdInformationService.CallCeidgApi();
-
+            switch ( dataExist(naturalPersons, naturalPerson.email, naturalPerson.idCardNumber, naturalPerson.pesel, naturalPerson.phoneNumber) ) {
+                case uniqueConstraintViolation.email:
+                    return BadRequest("email");
+                case uniqueConstraintViolation.idCard:
+                    return BadRequest("idCard");
+                case uniqueConstraintViolation.pesel:
+                    return BadRequest("pesel");
+                case uniqueConstraintViolation.phone:
+                    return BadRequest("phone");
+                default:
+                    _naturalPersonInterface.CreateNaturalPerson(naturalPerson);
+                    break;
+            }
+            
             int verificationToken = naturalPersonDto.verificationToken;
-            SendConfigurationMessage(verificationToken, ceidgInfo);
+            int customerNumber = naturalPersonDto.customerNumber;
+            EmailMessageService.SendConfigurationMessage(verificationToken, customerNumber);
             return CreatedAtAction(nameof(GetNaturalPerson), new { naturalPerson.id }, naturalPerson);
         }
 
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public IActionResult SetupNaturalPersonData([FromBody] NaturalPersonUpdateData updateData)
         {
             var updatedPerson = _naturalPersonInterface.SetupNaturalPersonData(updateData);
+            if (updatedPerson == null)
+                return BadRequest("Failed to update natural person data.");            
             return Ok(updatedPerson);
         }
 
-        private void SendConfigurationMessage(int verificationToken, string ceidgInfo)
+        private uniqueConstraintViolation dataExist(ICollection<NaturalPerson> naturalPersons, string email, string idCardNumber, string pesel, int phoneNumber)
         {
-            string header = "Prośba o Uzupełnienie Danych w Celu Aktywacji Konta w TwójBank";
-            string message = $"Szanowny Kliencie,\n" +
-                "Serdecznie witamy Cię w TwójBank! Dziękujemy za założenie konta w naszym banku. Abyś mógł pełnić korzyści z naszych usług, prosimy o kilka dodatkowych informacji.\n" +
-                "W celu zabezpieczenia Twojego konta, zalecamy natychmiastową zmianę tymczasowego hasła przydzielonego podczas rejestracji.\n" +
-                "Ponadto, w celu dokończenia procesu rejestracji, prosimy o podanie numeru NIP. Jeśli prowadzisz działalność gospodarczą, podaj również REGON.\n" +
-                "Te informacje są niezbędne do pełnej aktywacji Twojego konta.\n" +
-                "Proszę użyj poniższego linku do uzupełnienia powyższych danych:\n" +
-                "Link do uzupełnienia danych: http://localhost:8100/set_up_data?verificationToken=" + verificationToken + "\n\n" +
-                "Proszę pamiętać, że link będzie aktywny przez 48 godzin od chwili wysłania tego e-maila. Po tym okresie będziesz musiał(a) skontaktować się z nami w celu uzyskania nowego linku.\n\n" +
-                "Twoje bezpieczeństwo jest dla nas priorytetem, dlatego wykorzystujemy szyfrowane połączenia, aby zapewnić bezpieczeństwo Twoich danych.\n" +
-                "Dziękujemy za zaufanie i wybór TwójBank. Jesteśmy gotowi służyć Ci najlepszymi usługami finansowymi.\n" +
-                "W razie pytań lub problemów prosimy o kontakt z naszym działem obsługi klienta pod numerem [numer_telefonu] lub drogą mailową pod adresem [adres_email].\n\n" +
-                "Dane z CEIDG:\n" +
-                ceidgInfo +
-                "\n\nPozdrawiamy,\n" +
-                "Zespół TwójBank";
+            uniqueConstraintViolation violation = uniqueConstraintViolation.none;
 
-            EmailMessageService.SendEmail(header, message);
+            bool emailExists = naturalPersons.Any(np => np.email == email);
+            if (emailExists)
+                violation = uniqueConstraintViolation.email;                
+
+            bool idCardExists = naturalPersons.Any(np => np.idCardNumber == idCardNumber);
+            if (idCardExists)
+                violation = uniqueConstraintViolation.idCard;
+
+            bool peselExists = naturalPersons.Any(np => np.pesel == pesel);
+            if (peselExists)
+                violation = uniqueConstraintViolation.pesel;
+
+            bool phoneNumberExists = naturalPersons.Any(np => np.phoneNumber == phoneNumber);
+            if (phoneNumberExists)
+                violation = uniqueConstraintViolation.phone;
+
+            return violation;
+        }
+
+        private enum uniqueConstraintViolation
+        {
+            none,
+            email,
+            idCard,
+            pesel,
+            phone
         }
     }
 }

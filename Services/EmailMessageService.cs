@@ -5,9 +5,33 @@ using Newtonsoft.Json;
 namespace bankingApplication_API.Services
 {   class EmailMessageService
     {
+        public static void SendConfigurationMessage(int verificationToken, int customerNumber, string ceidgInfo = "")
+        {
+            string header = "Prośba o Uzupełnienie Danych w Celu Aktywacji Konta w TwójBank";
+            string message = $"Szanowny Kliencie,\n" +
+                "Serdecznie witamy Cię w TwójBank! Dziękujemy za założenie konta w naszym banku. Abyś mógł pełnić korzyści z naszych usług, prosimy o kilka dodatkowych informacji.\n" +
+                "W celu zabezpieczenia Twojego konta, zalecamy natychmiastową zmianę tymczasowego hasła przydzielonego podczas rejestracji.\n" +
+                "Jeśli zakładasz konto jako osoba fizyczna, prosimy o uzupełnienie numeru NIP.\n" +
+                "Te informacje są niezbędne do pełnej aktywacji Twojego konta.\n" +
+                "Proszę użyj poniższego linku do uzupełnienia powyższych danych:\n" +
+                "Link do uzupełnienia danych: http://localhost:8100/set_up_data?verificationToken=" + verificationToken + "\n" +
+                "Zaloguj się z użyciem tego numeru klienta: " + customerNumber + ".\n" +
+                "Zachowaj go, by używać go do logowania w przyszłości.\n" +
+                "Proszę pamiętać, że link będzie aktywny przez godzinę od chwili wysłania tego e-maila. Po tym okresie będziesz musiał(a) skontaktować się z nami w celu uzyskania nowego linku.\n\n" +
+                "Twoje bezpieczeństwo jest dla nas priorytetem, dlatego wykorzystujemy szyfrowane połączenia, aby zapewnić bezpieczeństwo Twoich danych.\n" +
+                "Dziękujemy za zaufanie i wybór TwójBank. Jesteśmy gotowi służyć Ci najlepszymi usługami finansowymi.\n" +
+                "W razie pytań lub problemów prosimy o kontakt z naszym działem obsługi klienta pod numerem [numer_telefonu] lub drogą mailową pod adresem [adres_email].\n\n" +
+                ceidgInfo +
+                "\n\nPozdrawiamy,\n" +
+                "Zespół TwójBank";
+
+            SendEmail(header, message);
+        }
+
         public static void SendEmail(string emailHeader, string emailContent)
         {
-            MailAddress from = new MailAddress("jka204@wp.pl");
+            EmailCredentials credentials = LoadSecrets();
+            MailAddress from = new MailAddress(credentials.Address);
             MailAddress to = new MailAddress("andriej2301@gmail.com");
             MailMessage email = new MailMessage(from, to);
 
@@ -18,11 +42,8 @@ namespace bankingApplication_API.Services
             smtp.Host = "smtp.wp.pl"; //gmail has security policy, that prevents automatically sending an email from api, while wp.pl is ok
             smtp.UseDefaultCredentials = false;
             smtp.Port = 587;
-            smtp.EnableSsl = true;
-
-            EmailCredentials credentials = LoadEmailCredentials();            
+            smtp.EnableSsl = true;                        
             smtp.Credentials = new NetworkCredential(credentials.Address, credentials.Password);
-
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
 
             try
@@ -35,9 +56,9 @@ namespace bankingApplication_API.Services
             }
         }
 
-        private static EmailCredentials LoadEmailCredentials()
+        public static EmailCredentials LoadSecrets()
         {
-            string secretsPath = "EmailCredentials.json"; //todo
+            string secretsPath = "Secrets\\EmailCredentials.json";
 
             try
             {
@@ -56,5 +77,6 @@ namespace bankingApplication_API.Services
     {
         public string Address { get; set; }
         public string Password { get; set; }
+        public string CEIDGToken { get; set; }
     }
 }

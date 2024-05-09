@@ -11,36 +11,48 @@ namespace bankingApplication_API.Repository
         public NaturalPersonRepository(DataContext context)
         {
             _context = context;
-        }
-
-        public NaturalPerson GetNaturalPerson(int id)
-        {
-            return _context.naturalPerson.Where(np => np.id == id).FirstOrDefault();
-        }
+        }        
 
         public NaturalPerson GetNaturalPerson(string LastName)
         {
             return _context.naturalPerson.Where(np => np.lastName == LastName).FirstOrDefault();
         }
-
-        public ICollection<NaturalPerson> GetNaturalPersons()
+        public NaturalPerson GetNaturalPersonByID(int id)
         {
+            return _context.naturalPerson.Where(np => np.id == id).FirstOrDefault();
+        }
+
+        public NaturalPerson GetNaturalPersonByPesel(string pesel)
+        {
+            return _context.naturalPerson.Where(np => np.pesel == pesel).FirstOrDefault();
+        }
+        public NaturalPerson FindCustomerNumber(int customerNumber) //if return null, customer number is wrong
+        {
+            NaturalPerson naturalPerson = _context.naturalPerson.Where(np => np.customerNumber == customerNumber).FirstOrDefault();
+            return naturalPerson;
+        }
+
+        public ICollection<NaturalPerson> GetNaturalPersons() {
             return _context.naturalPerson.OrderBy( np => np.id ).ToList();
         }
-        public void CreateNaturalPerson(NaturalPerson naturalPerson)
-        {
+        public void CreateNaturalPerson(NaturalPerson naturalPerson) {
             _context.naturalPerson.Add(naturalPerson);
             _context.SaveChanges();
         }
 
-        public bool NaturalPersonExists(int id)
-        {
+        public bool NaturalPersonExists(int id) {
             return _context.naturalPerson.Any(np => np.id == id);
         }     
         
         public bool VerificationTokenExists(int newToken)
         {
             var person = _context.naturalPerson.SingleOrDefault(p => p.verificationToken == newToken);
+            return person != null;
+        }
+
+        public bool customerNumberExists(int customerNumber)
+        {
+            var person = _context.naturalPerson.SingleOrDefault(p => p.customerNumber == customerNumber);
             return person != null;
         }
 

@@ -2,10 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using bankingApplication_API.Data;
 using bankingApplication_API.Interfaces;
 using bankingApplication_API.Repository;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 
 // WebApplication - a class representing the main application object.
 // It aggregates various components and functions that are frequently used in a web application configuration.
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -15,9 +17,22 @@ builder.Services.AddCors(options =>
                               .AllowAnyHeader()
                               .AllowAnyMethod());
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:8100")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<INaturalPersonInterface, NaturalPersonRepository>();
+builder.Services.AddScoped<IJuridicalPersonInterface, JuridicalPersonRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -27,12 +42,24 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = long.MaxValue;
+});
+
+builder.Services.AddMvc().AddMvcOptions(options =>
+{
+    options.EnableEndpointRouting = false;
+    options.Filters.Add(new ConsumesAttribute("multipart/form-data"));
+});
+
 var app = builder.Build(); //builds instance of WebApplication from WebApplicationBuilder's object
 
 // Configure the HTTP request pipeline.
 // Defines how the app handles incoming HTTP requests. 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -41,6 +68,15 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseCors("AllowAny");
 app.MapControllers();
+
+app.UseRouting();
+app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+app.UseMvc();
+
 
 using (var scope = app.Services.CreateScope())
 {

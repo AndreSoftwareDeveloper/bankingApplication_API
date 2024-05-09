@@ -4,13 +4,16 @@ namespace bankingApplication_API.Interfaces
 {
     public interface INaturalPersonInterface
     {
-        ICollection<NaturalPerson> GetNaturalPersons();
-        NaturalPerson GetNaturalPerson(int id);
-        NaturalPerson GetNaturalPerson(string LastName);
-        bool NaturalPersonExists(int id);
+        public ICollection<NaturalPerson> GetNaturalPersons();
+        public NaturalPerson GetNaturalPersonByID(int id);
+        public NaturalPerson GetNaturalPersonByPesel(string pesel);
+        public NaturalPerson FindCustomerNumber(int customerNumber);
+        public NaturalPerson GetNaturalPerson(string LastName);
+        public bool NaturalPersonExists(int id);
 
-        void CreateNaturalPerson(NaturalPerson naturalPerson);
-        bool VerificationTokenExists(int newToken);
-        NaturalPerson SetupNaturalPersonData(NaturalPersonUpdateData updateData);
+        public void CreateNaturalPerson(NaturalPerson naturalPerson);
+        public bool VerificationTokenExists(int newToken);
+        public bool customerNumberExists(int customerNumber);
+        public NaturalPerson SetupNaturalPersonData(NaturalPersonUpdateData updateData);
     }
 }

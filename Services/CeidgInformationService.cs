@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
+using bankingApplication_API.Services;
 
 class CeigdInformationService
 {
-    public static async Task<string> CallCeidgApi()
+    public static async Task<string> CallCeidgApi(long nip)
     {
-        string apiUrl = "https://dane.biznes.gov.pl/api/ceidg/v2/firma?nip=5250008028";
-        string accessToken = "eyJraWQiOiJjZWlkZyIsImFsZyI6IkhTNTEyIn0.eyJnaXZlbl9uYW1lIjoiQW5kcnplaiIsInBlc2VsIjoiMDEyNjIzMDA3OTQiLCJpYXQiOjE3MDE0MTk4MDYsImZhbWlseV9uYW1lIjoiU3pyZWRlciIsImNsaWVudF9pZCI6IlVTRVItMDEyNjIzMDA3OTQtQU5EUlpFSi1TWlJFREVSIn0.Z3WEZvXoRKHbt5HJd1awi7WGO-iJ4BGAv1SqGCU-beTkTwKR1ZApp267PpfZgiOzFS299uuqZ-6j3qp2uyHo9g";
+        string apiUrl = "https://dane.biznes.gov.pl/api/ceidg/v2/firma?nip=" + nip;
+        EmailCredentials secrets = EmailMessageService.LoadSecrets();
+        string accessToken = secrets.CEIDGToken;
         string result;
 
         try
@@ -38,12 +40,10 @@ class CeigdInformationService
         using (Process process = new Process { StartInfo = startInfo })
         {
             process.Start();
-
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
+            string output = await process.StandardOutput.ReadToEndAsync();
+            string error = await process.StandardError.ReadToEndAsync();
             string response = output + "\n" + error;
-
-            process.WaitForExit();
+            await process.WaitForExitAsync();
             return response;
         }
     }
