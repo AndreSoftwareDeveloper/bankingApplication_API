@@ -2,3 +2,4 @@ Secrets\EmailCredentials.json
 history.csv
 bin
 obj
+.vs/
