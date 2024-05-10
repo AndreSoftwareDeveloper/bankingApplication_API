@@ -1,5 +1,6 @@
-Secrets\EmailCredentials.json
+Secrets\*
 history.csv
 bin
 obj
 .vs/
+*.user
