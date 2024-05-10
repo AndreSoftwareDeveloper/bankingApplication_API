@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using bankingApplication_API.Data;
 using bankingApplication_API.Interfaces;
 using bankingApplication_API.Repository;
+
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc;
 
 // WebApplication - a class representing the main application object.
 // It aggregates various components and functions that are frequently used in a web application configuration.
@@ -36,7 +38,7 @@ builder.Services.AddScoped<IJuridicalPersonInterface, JuridicalPersonRepository>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = "Data Source=GAMING;Initial Catalog=Bank;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;MultiSubnetFailover=False\r\n";
+var connectionString = "Data Source=(local);Initial Catalog=Bank;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;MultiSubnetFailover=False\r\n";
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(connectionString);
@@ -68,7 +70,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseCors("AllowAny");
 app.MapControllers();
-
 app.UseRouting();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
