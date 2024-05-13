@@ -47,8 +47,8 @@ namespace bankingApplication_API.Validators
             Regon = regon;
             Phone = phone;
             Email = textInfo.ToLower(email);
-            EntryKRS = MappingProfiles.convertIFormFileToByteArray(entryKRS);
-            CompanyAgreement = MappingProfiles.convertIFormFileToByteArray(companyAgreement);
+            EntryKRS = convertIFormFileToByteArray(entryKRS);
+            CompanyAgreement = convertIFormFileToByteArray(companyAgreement);
             RepresentativeFirstName = textInfo.ToTitleCase(representativeFirstName);
             RepresentativeLastName = textInfo.ToTitleCase(representativeLastName);
             RepresentativeBirthDate = representativeBirthDate;
@@ -58,11 +58,20 @@ namespace bankingApplication_API.Validators
             RepresentativePhone = representativePhone;
             RepresentativeEmail = textInfo.ToLower(representativeEmail);
             RepresentativeIdNumber = textInfo.ToUpper(representativeIdNumber);
-            RepresentativeIdScan = MappingProfiles.convertIFormFileToByteArray(representativeIdScan);
+            RepresentativeIdScan = convertIFormFileToByteArray(representativeIdScan);
             Password = password;
             VerificationToken = verificationToken;
             CustomerNumber = customerNumber;
             CreationTime = DateTime.Now;
         }
+
+        private readonly Func<IFormFile, byte[]> convertIFormFileToByteArray = (file) =>
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
+        };
     }
 }

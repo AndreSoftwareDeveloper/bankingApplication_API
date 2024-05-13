@@ -21,15 +21,6 @@ namespace bankingApplication_API.Helper
 
             CreateMap<JuridicalPersonValidator, JuridicalPerson>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
-        }
-
-        public static Func<IFormFile, byte[]> convertIFormFileToByteArray = (file) =>
-        {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                file.CopyTo(memoryStream);
-                return memoryStream.ToArray();
-            }
-        };
+        }        
     }
 }
