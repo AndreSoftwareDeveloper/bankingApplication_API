@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using bankingApplication_API.Validators;
-
 namespace bankingApplication_API.Models
 {
     [Table("NaturalPerson")]
@@ -10,21 +8,21 @@ namespace bankingApplication_API.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public DateOnly birthDate { get; set; }
-        public string birthPlace { get; set; }
-        public string address { get; set; }
-        public string pesel { get; set; }
-        public string idCardNumber { get; set; } //TODO separate class for IDCardNumber
-        public int phoneNumber { get; set; }
-        public string email { get; set; }
-        public string? password { get; set; }
-        public int verificationToken { get; set; }
-        public long? nip { get; set; }
-        public long? regon { get; set; }
-        public int customerNumber { get; set; }
-        public DateTime creationTime { get; set; }
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateOnly BirthDate { get; set; }
+        public string BirthPlace { get; set; }
+        public string Address { get; set; }
+        public string Pesel { get; set; }
+        public string IdCardNumber { get; set; } //TODO separate class for IDCardNumber
+        public int PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string? Password { get; set; }
+        public int VerificationToken { get; set; }
+        public long? Nip { get; set; }
+        public long? Regon { get; set; }
+        public int CustomerNumber { get; set; }
+        public DateTime CreationTime { get; set; }
     }
 }

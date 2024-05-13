@@ -11,10 +11,10 @@ namespace bankingApplication_API.Helper
         public MappingProfiles()
         {
             CreateMap<NaturalPersonDto, NaturalPersonValidator>()
-            .ForMember(dest => dest.id, opt => opt.Ignore());
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
             CreateMap<NaturalPersonValidator, NaturalPerson>()
-                .ForMember(dest => dest.id, opt => opt.Ignore());
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
 
             CreateMap<JuridicalPersonDto, JuridicalPersonValidator>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());

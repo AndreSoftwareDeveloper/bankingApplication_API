@@ -7,39 +7,39 @@ namespace bankingApplication_API.Models
 {
     public class JuridicalPersonDto
     {
-        public int id { get; set; }
-        public string companyName { get; set; }
-        public string companyAddress { get; set; }
-        public string correspondenceAddress { get; set; }
-        public long nip { get; set; }
-        public long regon { get; set; }
-        public int phone { get; set; }
-        public string email { get; set; }
+        public int Id { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
+        public string CorrespondenceAddress { get; set; }
+        public long Nip { get; set; }
+        public long Regon { get; set; }
+        public int Phone { get; set; }
+        public string Email { get; set; }
 
         [NotMapped]
-        public IFormFile entryKRS { get; set; }
+        public IFormFile EntryKRS { get; set; }
 
         [NotMapped]
-        public IFormFile companyAgreement { get; set; }
+        public IFormFile CompanyAgreement { get; set; }
 
-        public string representativeFirstName { get; set; }
-        public string representativeLastName { get; set; }
+        public string RepresentativeFirstName { get; set; }
+        public string RepresentativeLastName { get; set; }
 
         [JsonConverter(typeof(DateOnlyConverter))]
-        public DateOnly representativeBirthDate { get; set; }
-        public string representativeBirthPlace { get; set; }
-        public string representativeAddress { get; set; }
-        public string representativePesel { get; set; }
-        public int representativePhone { get; set; }
-        public string representativeEmail { get; set; }
-        public string representativeIdNumber { get; set; }
+        public DateOnly RepresentativeBirthDate { get; set; }
+        public string RepresentativeBirthPlace { get; set; }
+        public string RepresentativeAddress { get; set; }
+        public string RepresentativePesel { get; set; }
+        public int RepresentativePhone { get; set; }
+        public string RepresentativeEmail { get; set; }
+        public string RepresentativeIdNumber { get; set; }
 
         [NotMapped]
-        public IFormFile representativeIdScan { get; set; }
+        public IFormFile RepresentativeIdScan { get; set; }
 
-        public string password { get; set; } = "temporary_password";
-        public int verificationToken { get; set; } = UniqueNumberGenerator.GenerateVerificationToken(typeof(JuridicalPersonController));
-        public int customerNumber { get; set; } = UniqueNumberGenerator.GenerateCustomerNumber(typeof(JuridicalPersonController));
-        public DateTime creationTime { get; set; } = DateTime.Now;
+        public string Password { get; set; } = "temporary_password";
+        public int VerificationToken { get; set; } = UniqueNumberGenerator.GenerateVerificationToken(typeof(JuridicalPersonController));
+        public int CustomerNumber { get; set; } = UniqueNumberGenerator.GenerateCustomerNumber(typeof(JuridicalPersonController));
+        public DateTime CreationTime { get; set; } = DateTime.Now;
     }
 }

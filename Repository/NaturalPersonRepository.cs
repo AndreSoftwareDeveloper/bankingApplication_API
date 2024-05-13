@@ -15,25 +15,25 @@ namespace bankingApplication_API.Repository
 
         public NaturalPerson GetNaturalPerson(string LastName)
         {
-            return _context.naturalPerson.Where(np => np.lastName == LastName).FirstOrDefault();
+            return _context.naturalPerson.Where(np => np.LastName == LastName).FirstOrDefault();
         }
         public NaturalPerson GetNaturalPersonByID(int id)
         {
-            return _context.naturalPerson.Where(np => np.id == id).FirstOrDefault();
+            return _context.naturalPerson.Where(np => np.Id == id).FirstOrDefault();
         }
 
         public NaturalPerson GetNaturalPersonByPesel(string pesel)
         {
-            return _context.naturalPerson.Where(np => np.pesel == pesel).FirstOrDefault();
+            return _context.naturalPerson.Where(np => np.Pesel == pesel).FirstOrDefault();
         }
         public NaturalPerson FindCustomerNumber(int customerNumber) //if return null, customer number is wrong
         {
-            NaturalPerson naturalPerson = _context.naturalPerson.Where(np => np.customerNumber == customerNumber).FirstOrDefault();
+            NaturalPerson naturalPerson = _context.naturalPerson.Where(np => np.CustomerNumber == customerNumber).FirstOrDefault();
             return naturalPerson;
         }
 
         public ICollection<NaturalPerson> GetNaturalPersons() {
-            return _context.naturalPerson.OrderBy( np => np.id ).ToList();
+            return _context.naturalPerson.OrderBy( np => np.Id ).ToList();
         }
         public void CreateNaturalPerson(NaturalPerson naturalPerson) {
             _context.naturalPerson.Add(naturalPerson);
@@ -41,28 +41,28 @@ namespace bankingApplication_API.Repository
         }
 
         public bool NaturalPersonExists(int id) {
-            return _context.naturalPerson.Any(np => np.id == id);
+            return _context.naturalPerson.Any(np => np.Id == id);
         }     
         
         public bool VerificationTokenExists(int newToken)
         {
-            var person = _context.naturalPerson.SingleOrDefault(p => p.verificationToken == newToken);
+            var person = _context.naturalPerson.SingleOrDefault(p => p.VerificationToken == newToken);
             return person != null;
         }
 
         public bool customerNumberExists(int customerNumber)
         {
-            var person = _context.naturalPerson.SingleOrDefault(p => p.customerNumber == customerNumber);
+            var person = _context.naturalPerson.SingleOrDefault(p => p.CustomerNumber == customerNumber);
             return person != null;
         }
 
         public NaturalPerson SetupNaturalPersonData(NaturalPersonUpdateData updateData) //returns id of the person with specified verification token
         {
-            NaturalPerson updatedPerson = _context.naturalPerson.Where(np => np.verificationToken == updateData.verificationToken).FirstOrDefault(); //todo check if updatedPerson isn't null
+            NaturalPerson updatedPerson = _context.naturalPerson.Where(np => np.VerificationToken == updateData.VerificationToken).FirstOrDefault(); //todo check if updatedPerson isn't null
 
-            updatedPerson.password = updateData.newPassword;
-            updatedPerson.nip = updateData.nip;
-            updatedPerson.regon = updateData.regon;
+            updatedPerson.Password = updateData.NewPassword;
+            updatedPerson.Nip = updateData.Nip;
+            updatedPerson.Regon = updateData.Regon;
 
             _context.SaveChanges();
             return updatedPerson;

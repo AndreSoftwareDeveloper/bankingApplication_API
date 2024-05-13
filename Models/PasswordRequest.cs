@@ -2,8 +2,7 @@
 {
     public class PasswordRequest
     {
-        public int customerNumber { get; set; }
-        public string password { get; set; }
+        public int CustomerNumber { get; set; }
+        public string Password { get; set; }
     }
-
 }

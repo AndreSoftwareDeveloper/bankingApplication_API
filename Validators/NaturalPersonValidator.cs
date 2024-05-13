@@ -4,45 +4,45 @@ namespace bankingApplication_API.Validators
 {
     public class NaturalPersonValidator
     {
-        public int id { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public DateOnly birthDate { get; set; }
-        public string birthPlace { get; set; }
-        public string address { get; set; }
-        public string pesel { get; set; }
-        public string idCardNumber { get; set; }
-        public int phoneNumber { get; set; }
-        public string email { get; set; }
-        public string? password { get; set; }
-        public int verificationToken { get; set; }
-        public long? nip { get; set; }
-        public long? regon { get; set; }
-        public int customerNumber { get; set; }
-        public DateTime creationTime { get; set; }
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateOnly BirthDate { get; set; }
+        public string BirthPlace { get; set; }
+        public string Address { get; set; }
+        public string Pesel { get; set; }
+        public string IdCardNumber { get; set; }
+        public int PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string? Password { get; set; }
+        public int VerificationToken { get; set; }
+        public long? Nip { get; set; }
+        public long? Regon { get; set; }
+        public int CustomerNumber { get; set; }
+        public DateTime CreationTime { get; set; }
 
-        private static CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-        private static TextInfo textInfo = cultureInfo.TextInfo;
+        private static readonly CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+        private static readonly TextInfo textInfo = cultureInfo.TextInfo;
 
         public NaturalPersonValidator(
             string firstName, string lastName, DateOnly birthDate, string birthPlace, string address, string pesel, string idCardNumber,
             int phoneNumber, string email, string password, int verificationToken, long? nip, long? regon, int customerNumber)
         {
-            this.firstName = textInfo.ToTitleCase(firstName);
-            this.lastName = textInfo.ToTitleCase(lastName);
-            this.birthDate = birthDate;
-            this.birthPlace = textInfo.ToTitleCase(birthPlace);
-            this.address = textInfo.ToTitleCase(address);
-            this.pesel = pesel;
-            this.idCardNumber = textInfo.ToUpper(idCardNumber);
-            this.phoneNumber = phoneNumber;
-            this.email = textInfo.ToLower(email);
-            this.password = password;
-            this.verificationToken = verificationToken;
-            this.nip = nip;
-            this.regon = regon;
-            this.customerNumber = customerNumber;
-            this.creationTime = DateTime.Now;
+            FirstName = textInfo.ToTitleCase(firstName);
+            LastName = textInfo.ToTitleCase(lastName);
+            BirthDate = birthDate;
+            BirthPlace = textInfo.ToTitleCase(birthPlace);
+            Address = textInfo.ToTitleCase(address);
+            Pesel = pesel;
+            IdCardNumber = textInfo.ToUpper(idCardNumber);
+            PhoneNumber = phoneNumber;
+            Email = textInfo.ToLower(email);
+            Password = password;
+            VerificationToken = verificationToken;
+            Nip = nip;
+            Regon = regon;
+            CustomerNumber = customerNumber;
+            CreationTime = DateTime.Now;
         }
     }
 }

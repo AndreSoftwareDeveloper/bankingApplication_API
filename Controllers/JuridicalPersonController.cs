@@ -81,9 +81,9 @@ namespace bankingApplication_API.Controllers
                     break;
             }
             
-            int verificationToken = juridicalPersonDto.verificationToken;
-            int customerNumber = juridicalPersonDto.customerNumber;
-            long nip = juridicalPersonDto.nip;
+            int verificationToken = juridicalPersonDto.VerificationToken;
+            int customerNumber = juridicalPersonDto.CustomerNumber;
+            long nip = juridicalPersonDto.Nip;
             string ceidgInfo = await CeigdInformationService.CallCeidgApi(nip);
             EmailMessageService.SendConfigurationMessage(verificationToken, customerNumber, ceidgInfo);
             return CreatedAtAction(nameof(GetJuridicalPerson), new { juridicalPerson.Id }, juridicalPerson);

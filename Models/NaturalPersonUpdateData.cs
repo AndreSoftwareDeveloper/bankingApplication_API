@@ -2,9 +2,9 @@
 {
     public class NaturalPersonUpdateData
     {
-        public int verificationToken { get; set; }
-        public string newPassword { get; set; }
-        public long nip { get; set; }
-        public long regon {  get; set; }
+        public int VerificationToken { get; set; }
+        public string NewPassword { get; set; }
+        public long Nip { get; set; }
+        public long Regon {  get; set; }
     }
 }

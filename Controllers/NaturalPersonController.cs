@@ -77,7 +77,7 @@ namespace bankingApplication_API.Controllers
             var naturalPerson = _mapper.Map<NaturalPerson>(validator);
             ICollection<NaturalPerson> naturalPersons = _naturalPersonInterface.GetNaturalPersons();
 
-            switch ( dataExist(naturalPersons, naturalPerson.email, naturalPerson.idCardNumber, naturalPerson.pesel, naturalPerson.phoneNumber) ) {
+            switch ( dataExist(naturalPersons, naturalPerson.Email, naturalPerson.IdCardNumber, naturalPerson.Pesel, naturalPerson.PhoneNumber) ) {
                 case uniqueConstraintViolation.email:
                     return BadRequest("email");
                 case uniqueConstraintViolation.idCard:
@@ -91,10 +91,10 @@ namespace bankingApplication_API.Controllers
                     break;
             }
             
-            int verificationToken = naturalPersonDto.verificationToken;
-            int customerNumber = naturalPersonDto.customerNumber;
+            int verificationToken = naturalPersonDto.VerificationToken;
+            int customerNumber = naturalPersonDto.CustomerNumber;
             EmailMessageService.SendConfigurationMessage(verificationToken, customerNumber);
-            return CreatedAtAction(nameof(GetNaturalPerson), new { naturalPerson.id }, naturalPerson);
+            return CreatedAtAction(nameof(GetNaturalPerson), new { naturalPerson.Id }, naturalPerson);
         }
 
 
@@ -114,19 +114,19 @@ namespace bankingApplication_API.Controllers
         {
             uniqueConstraintViolation violation = uniqueConstraintViolation.none;
 
-            bool emailExists = naturalPersons.Any(np => np.email == email);
+            bool emailExists = naturalPersons.Any(np => np.Email == email);
             if (emailExists)
                 violation = uniqueConstraintViolation.email;                
 
-            bool idCardExists = naturalPersons.Any(np => np.idCardNumber == idCardNumber);
+            bool idCardExists = naturalPersons.Any(np => np.IdCardNumber == idCardNumber);
             if (idCardExists)
                 violation = uniqueConstraintViolation.idCard;
 
-            bool peselExists = naturalPersons.Any(np => np.pesel == pesel);
+            bool peselExists = naturalPersons.Any(np => np.Pesel == pesel);
             if (peselExists)
                 violation = uniqueConstraintViolation.pesel;
 
-            bool phoneNumberExists = naturalPersons.Any(np => np.phoneNumber == phoneNumber);
+            bool phoneNumberExists = naturalPersons.Any(np => np.PhoneNumber == phoneNumber);
             if (phoneNumberExists)
                 violation = uniqueConstraintViolation.phone;
 

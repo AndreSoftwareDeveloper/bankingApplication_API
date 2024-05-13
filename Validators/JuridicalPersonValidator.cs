@@ -15,7 +15,6 @@ namespace bankingApplication_API.Validators
         public string Email { get; set; }
         public byte[] EntryKRS { get; set; }
         public byte[] CompanyAgreement { get; set; }
-
         public string RepresentativeFirstName { get; set; }
         public string RepresentativeLastName { get; set; }
         public DateOnly RepresentativeBirthDate { get; set; }
@@ -31,8 +30,8 @@ namespace bankingApplication_API.Validators
         public int CustomerNumber { get; set; }
         public DateTime CreationTime { get; set; }
 
-        private static CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-        private static TextInfo textInfo = cultureInfo.TextInfo;
+        private static readonly CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+        private static readonly TextInfo textInfo = cultureInfo.TextInfo;
 
         public JuridicalPersonValidator(string companyName, string companyAddress, string correspondenceAddress,
             long nip, long regon, int phone, string email, IFormFile entryKRS, IFormFile companyAgreement,
