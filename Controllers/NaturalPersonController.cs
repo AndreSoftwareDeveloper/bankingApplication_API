@@ -93,7 +93,7 @@ namespace bankingApplication_API.Controllers
             
             int verificationToken = naturalPersonDto.VerificationToken;
             int customerNumber = naturalPersonDto.CustomerNumber;
-            EmailMessageService.SendConfigurationMessage(verificationToken, customerNumber);
+            EmailMessageService.SendConfigurationMessage(verificationToken, customerNumber, naturalPerson.Email);
             return CreatedAtAction(nameof(GetNaturalPerson), new { naturalPerson.Id }, naturalPerson);
         }
 

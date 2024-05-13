@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace bankingApplication_API.Services
 {   class EmailMessageService
     {
-        public static void SendConfigurationMessage(int verificationToken, int customerNumber, string ceidgInfo = "")
+        public static void SendConfigurationMessage(int verificationToken, int customerNumber, string receiverAddress, string ceidgInfo = "")
         {
             string header = "Prośba o Uzupełnienie Danych w Celu Aktywacji Konta w TwójBank";
             string message = $"Szanowny Kliencie,\n" +
@@ -25,14 +25,14 @@ namespace bankingApplication_API.Services
                 "\n\nPozdrawiamy,\n" +
                 "Zespół TwójBank";
 
-            SendEmail(header, message);
+            SendEmail(header, message, receiverAddress);
         }
 
-        public static void SendEmail(string emailHeader, string emailContent)
+        public static void SendEmail(string emailHeader, string emailContent, string emailReceiver)
         {
             EmailCredentials credentials = LoadSecrets();
             MailAddress from = new MailAddress(credentials.Address);
-            MailAddress to = new MailAddress("andriej2301@gmail.com");
+            MailAddress to = new MailAddress(emailReceiver);
             MailMessage email = new MailMessage(from, to);
 
             email.Subject = emailHeader;
