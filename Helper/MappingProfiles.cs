@@ -14,13 +14,10 @@ namespace bankingApplication_API.Helper
             .ForMember(dest => dest.id, opt => opt.Ignore());
 
             CreateMap<NaturalPersonValidator, NaturalPerson>()
-                .ForMember(dest => dest.id, opt => opt.Ignore());                
+                .ForMember(dest => dest.id, opt => opt.Ignore());
 
             CreateMap<JuridicalPersonDto, JuridicalPersonValidator>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.EntryKRS, opt => opt.MapFrom(src => convertIFormFileToByteArray(src.entryKRS)))
-                .ForMember(dest => dest.CompanyAgreement, opt => opt.MapFrom(src => convertIFormFileToByteArray(src.companyAgreement)))
-                .ForMember(dest => dest.RepresentativeIdScan, opt => opt.MapFrom(src => convertIFormFileToByteArray(src.representativeIdScan)));
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
 
             CreateMap<JuridicalPersonValidator, JuridicalPerson>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());

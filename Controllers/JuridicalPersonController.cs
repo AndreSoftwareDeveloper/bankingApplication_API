@@ -61,31 +61,7 @@ namespace bankingApplication_API.Controllers
             if (juridicalPersonDto == null)
                 return BadRequest("Invalid data.");
 
-            JuridicalPersonValidator validator = new JuridicalPersonValidator(
-                juridicalPersonDto.companyName,
-                juridicalPersonDto.companyAddress,
-                juridicalPersonDto.correspondenceAddress,
-                juridicalPersonDto.nip,
-                juridicalPersonDto.regon,
-                juridicalPersonDto.phone,
-                juridicalPersonDto.email,
-                MappingProfiles.convertIFormFileToByteArray(juridicalPersonDto.entryKRS),
-                MappingProfiles.convertIFormFileToByteArray(juridicalPersonDto.companyAgreement),
-                juridicalPersonDto.representativeFirstName,
-                juridicalPersonDto.representativeLastName,
-                juridicalPersonDto.representativeBirthDate,
-                juridicalPersonDto.representativeBirthPlace,
-                juridicalPersonDto.representativeAddress,
-                juridicalPersonDto.representativePesel,
-                juridicalPersonDto.representativePhone,
-                juridicalPersonDto.representativeEmail,
-                juridicalPersonDto.representativeIdNumber,
-                MappingProfiles.convertIFormFileToByteArray(juridicalPersonDto.representativeIdScan),
-                juridicalPersonDto.password,
-                juridicalPersonDto.verificationToken,
-                juridicalPersonDto.customerNumber
-            );
-
+            var validator = _mapper.Map<JuridicalPersonValidator>(juridicalPersonDto);
             var juridicalPerson = _mapper.Map<JuridicalPerson>(validator);
             ICollection<JuridicalPerson> juridicalPersons = _juridicalPersonInterface.GetJuridicalPersons();
 
