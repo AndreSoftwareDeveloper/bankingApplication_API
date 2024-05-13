@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace bankingApplication_API.Services
 {   class EmailMessageService
     {
-        public static void SendConfigurationMessage(int verificationToken, int customerNumber, string receiverAddress, string ceidgInfo = "")
+        public static void SendConfigurationMessage(int verificationToken, int customerNumber, string receiver, string ceidgInfo = "")
         {
             string header = "Prośba o Uzupełnienie Danych w Celu Aktywacji Konta w TwójBank";
             string message = $"Szanowny Kliencie,\n" +
@@ -25,20 +25,14 @@ namespace bankingApplication_API.Services
                 "\n\nPozdrawiamy,\n" +
                 "Zespół TwójBank";
 
-            SendEmail(header, message, receiverAddress);
+            SendEmail(header, message, receiver);
         }
 
-        public static void SendEmail(string emailHeader, string emailContent, string emailReceiver)
+        public static void SendEmail(string emailHeader, string emailContent, string receiver)
         {
-            EmailCredentials credentials = LoadSecrets();
-            MailAddress from = new MailAddress(credentials.Address);
-            MailAddress to = new MailAddress(emailReceiver);
-            MailMessage email = new MailMessage(from, to);
-
-            email.Subject = emailHeader;
-            email.Body = emailContent;
-
+            EmailCredentials credentials = LoadSecrets();   
             SmtpClient smtp = new SmtpClient();
+
             smtp.Host = "smtp.wp.pl"; //gmail has security policy, that prevents automatically sending an email from api, while wp.pl is ok
             smtp.UseDefaultCredentials = false;
             smtp.Port = 587;
@@ -48,6 +42,12 @@ namespace bankingApplication_API.Services
 
             try
             {
+                MailAddress from = new MailAddress(credentials.Address);
+                MailAddress to = new MailAddress(receiver);
+                MailMessage email = new MailMessage(from, to);
+
+                email.Subject = emailHeader;
+                email.Body = emailContent;
                 smtp.Send(email);
             }
             catch (SmtpException ex)
