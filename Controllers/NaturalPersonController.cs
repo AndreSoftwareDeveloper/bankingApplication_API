@@ -3,6 +3,7 @@ using bankingApplication_API.Dto;
 using bankingApplication_API.Interfaces;
 using bankingApplication_API.Models;
 using bankingApplication_API.Services;
+using bankingApplication_API.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bankingApplication_API.Controllers
@@ -20,6 +21,7 @@ namespace bankingApplication_API.Controllers
             _mapper = mapper;
         }
 
+
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<NaturalPerson>))]
         [ProducesResponseType(400)]
@@ -31,6 +33,7 @@ namespace bankingApplication_API.Controllers
                 return BadRequest(ModelState);
             return Ok(naturalPersons);
         }
+
 
         [HttpGet( "{id}" )]
         [ProducesResponseType(200, Type = typeof(NaturalPerson))]
@@ -47,6 +50,7 @@ namespace bankingApplication_API.Controllers
                 return BadRequest(ModelState);
             return Ok(naturalPerson);
         }
+        
 
         [HttpGet("customerNumber/{customerNumber}")]
         [ProducesResponseType(200)]
@@ -59,6 +63,7 @@ namespace bankingApplication_API.Controllers
             return Ok(naturalPerson);
         }
 
+
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(NaturalPersonDto))]
         [ProducesResponseType(400)]
@@ -67,7 +72,8 @@ namespace bankingApplication_API.Controllers
             if (naturalPersonDto == null)
                 return BadRequest("Invalid data.");
 
-            var naturalPerson = _mapper.Map<NaturalPerson>(naturalPersonDto);
+            var validator = _mapper.Map<NaturalPersonValidator>(naturalPersonDto);
+            var naturalPerson = _mapper.Map<NaturalPerson>(validator);
             ICollection<NaturalPerson> naturalPersons = _naturalPersonInterface.GetNaturalPersons();
 
             switch ( dataExist(naturalPersons, naturalPerson.email, naturalPerson.idCardNumber, naturalPerson.pesel, naturalPerson.phoneNumber) ) {
@@ -90,6 +96,7 @@ namespace bankingApplication_API.Controllers
             return CreatedAtAction(nameof(GetNaturalPerson), new { naturalPerson.id }, naturalPerson);
         }
 
+
         [HttpPatch]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -100,6 +107,7 @@ namespace bankingApplication_API.Controllers
                 return BadRequest("Failed to update natural person data.");            
             return Ok(updatedPerson);
         }
+
 
         private uniqueConstraintViolation dataExist(ICollection<NaturalPerson> naturalPersons, string email, string idCardNumber, string pesel, int phoneNumber)
         {
@@ -123,6 +131,7 @@ namespace bankingApplication_API.Controllers
 
             return violation;
         }
+
 
         private enum uniqueConstraintViolation
         {

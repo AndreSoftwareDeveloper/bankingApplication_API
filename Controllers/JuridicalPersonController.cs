@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+
 using bankingApplication_API.Interfaces;
 using bankingApplication_API.Models;
 using bankingApplication_API.Services;
+using bankingApplication_API.Validators;
+using bankingApplication_API.Helper;
 
 namespace bankingApplication_API.Controllers
 {
@@ -19,6 +22,7 @@ namespace bankingApplication_API.Controllers
             _mapper = mapper;
         }
 
+
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<JuridicalPerson>))]
         [ProducesResponseType(400)]
@@ -30,6 +34,7 @@ namespace bankingApplication_API.Controllers
                 return BadRequest(ModelState);
             return Ok(juridicalPersons);
         }
+
 
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(JuridicalPerson))]
@@ -45,26 +50,18 @@ namespace bankingApplication_API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(juridicalPerson);
-        }        
+        }
+        
 
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(JuridicalPersonDto))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateJuridicalPerson([FromForm] JuridicalPersonDto juridicalPersonDto)
         {
-            Func<IFormFile, byte[]> convertIFormFileToByteArray = (file) =>
-            {
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    file.CopyTo(memoryStream);
-                    return memoryStream.ToArray();
-                }
-            };
-
             if (juridicalPersonDto == null)
                 return BadRequest("Invalid data.");
 
-            JuridicalPerson juridicalPerson = new JuridicalPerson(
+            JuridicalPersonValidator validator = new JuridicalPersonValidator(
                 juridicalPersonDto.companyName,
                 juridicalPersonDto.companyAddress,
                 juridicalPersonDto.correspondenceAddress,
@@ -72,8 +69,8 @@ namespace bankingApplication_API.Controllers
                 juridicalPersonDto.regon,
                 juridicalPersonDto.phone,
                 juridicalPersonDto.email,
-                convertIFormFileToByteArray(juridicalPersonDto.entryKRS),
-                convertIFormFileToByteArray(juridicalPersonDto.companyAgreement),
+                MappingProfiles.convertIFormFileToByteArray(juridicalPersonDto.entryKRS),
+                MappingProfiles.convertIFormFileToByteArray(juridicalPersonDto.companyAgreement),
                 juridicalPersonDto.representativeFirstName,
                 juridicalPersonDto.representativeLastName,
                 juridicalPersonDto.representativeBirthDate,
@@ -83,15 +80,16 @@ namespace bankingApplication_API.Controllers
                 juridicalPersonDto.representativePhone,
                 juridicalPersonDto.representativeEmail,
                 juridicalPersonDto.representativeIdNumber,
-                convertIFormFileToByteArray(juridicalPersonDto.representativeIdScan),
+                MappingProfiles.convertIFormFileToByteArray(juridicalPersonDto.representativeIdScan),
                 juridicalPersonDto.password,
                 juridicalPersonDto.verificationToken,
                 juridicalPersonDto.customerNumber
             );
 
+            var juridicalPerson = _mapper.Map<JuridicalPerson>(validator);
             ICollection<JuridicalPerson> juridicalPersons = _juridicalPersonInterface.GetJuridicalPersons();
 
-            switch (dataExist(juridicalPersons, juridicalPerson.companyName, juridicalPerson.nip, juridicalPerson.regon, juridicalPerson.phone, juridicalPerson.email, juridicalPerson.entryKRS, juridicalPerson.companyAgreement))
+            switch (dataExist(juridicalPersons, juridicalPerson.CompanyName, juridicalPerson.Nip, juridicalPerson.Regon, juridicalPerson.Phone, juridicalPerson.Email, juridicalPerson.EntryKRS, juridicalPerson.CompanyAgreement))
             {
                 case uniqueConstraintViolation.companyName:
                     return BadRequest("companyName");
@@ -113,8 +111,9 @@ namespace bankingApplication_API.Controllers
             long nip = juridicalPersonDto.nip;
             string ceidgInfo = await CeigdInformationService.CallCeidgApi(nip);
             EmailMessageService.SendConfigurationMessage(verificationToken, customerNumber, ceidgInfo);
-            return CreatedAtAction(nameof(GetJuridicalPerson), new { juridicalPerson.id }, juridicalPerson);
+            return CreatedAtAction(nameof(GetJuridicalPerson), new { juridicalPerson.Id }, juridicalPerson);
         }
+
 
         [HttpGet("customerNumber/{customerNumber}")]
         [ProducesResponseType(200)]
@@ -127,28 +126,29 @@ namespace bankingApplication_API.Controllers
             return Ok(juridicalPerson);
         }
 
+
         private uniqueConstraintViolation dataExist(ICollection<JuridicalPerson> juridicalPerson, string companyName, long nip,
             long regon, int phone, string email, byte[] entryKRS, byte[] companyAgreement)
         {
             uniqueConstraintViolation violation = uniqueConstraintViolation.none;
 
-            bool companyNameExists = juridicalPerson.Any(np => np.companyName == companyName);
+            bool companyNameExists = juridicalPerson.Any(np => np.CompanyName == companyName);
             if (companyNameExists)
                 violation = uniqueConstraintViolation.companyName;
 
-            bool nipExists = juridicalPerson.Any(np => np.nip == nip);
+            bool nipExists = juridicalPerson.Any(np => np.Nip == nip);
             if (nipExists)
                 violation = uniqueConstraintViolation.nip;
 
-            bool regonExists = juridicalPerson.Any(np => np.regon == regon);
+            bool regonExists = juridicalPerson.Any(np => np.Regon == regon);
             if (regonExists)
                 violation = uniqueConstraintViolation.regon;
 
-            bool companyPhoneExists = juridicalPerson.Any(np => np.phone == phone);
+            bool companyPhoneExists = juridicalPerson.Any(np => np.Phone == phone);
             if (companyPhoneExists)
                 violation = uniqueConstraintViolation.phone;
 
-            bool companyEmailExists = juridicalPerson.Any(np => np.email == email);
+            bool companyEmailExists = juridicalPerson.Any(np => np.Email == email);
             if (companyEmailExists)
                 violation = uniqueConstraintViolation.email;
 

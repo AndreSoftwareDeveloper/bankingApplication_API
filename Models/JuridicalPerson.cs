@@ -8,63 +8,29 @@ namespace bankingApplication_API.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public string companyName { get; set; }
-        public string companyAddress { get; set; }
-        public string correspondenceAddress { get; set; }
-        public long nip { get; set; }
-        public long regon { get; set; }
-        public int phone { get; set; }
-        public string email { get; set; }
-        public byte[] entryKRS { get; set; }
-        public byte[] companyAgreement { get; set; }
-
-        public string representativeFirstName { get; set; }
-        public string representativeLastName { get; set; }
-        public DateOnly representativeBirthDate { get; set; }
-        public string representativeBirthPlace { get; set; }
-        public string representativeAddress { get; set; }
-        public string representativePesel { get; set; }
-        public int representativePhone { get; set; }
-        public string representativeEmail { get; set; }
-        public string representativeIdNumber { get; set; }
-        public byte[] representativeIdScan { get; set; }
-
-        public string password { get; set; }
-        public int verificationToken { get; set; }
-        public int customerNumber { get; set; }
-        public DateTime creationTime { get; set; }
-
-        public JuridicalPerson(string companyName, string companyAddress, string correspondenceAddress,
-            long nip, long regon, int phone, string email, byte[] entryKRS, byte[] companyAgreement, 
-            string representativeFirstName, string representativeLastName, DateOnly representativeBirthDate,
-            string representativeBirthPlace, string representativeAddress, string representativePesel, 
-            int representativePhone, string representativeEmail, string representativeIdNumber, 
-            byte[] representativeIdScan, string password, int verificationToken, int customerNumber)
-        {
-            this.companyName = companyName;
-            this.companyAddress = companyAddress;
-            this.correspondenceAddress = correspondenceAddress;
-            this.nip = nip;
-            this.regon = regon;
-            this.phone = phone;
-            this.email = email;
-            this.entryKRS = entryKRS;
-            this.companyAgreement = companyAgreement;
-            this.representativeFirstName = representativeFirstName;
-            this.representativeLastName = representativeLastName;
-            this.representativeBirthDate = representativeBirthDate;
-            this.representativeBirthPlace = representativeBirthPlace;
-            this.representativeAddress = representativeAddress;
-            this.representativePesel = representativePesel;
-            this.representativePhone = representativePhone;
-            this.representativeEmail = representativeEmail;
-            this.representativeIdNumber = representativeIdNumber;
-            this.representativeIdScan = representativeIdScan;
-            this.password = password;
-            this.verificationToken = verificationToken;
-            this.customerNumber = customerNumber;
-            this.creationTime = DateTime.Now;
-        }
+        public int Id { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
+        public string CorrespondenceAddress { get; set; }
+        public long Nip { get; set; }
+        public long Regon { get; set; }
+        public int Phone { get; set; }
+        public string Email { get; set; }
+        public byte[] EntryKRS { get; set; }
+        public byte[] CompanyAgreement { get; set; }
+        public string RepresentativeFirstName { get; set; }
+        public string RepresentativeLastName { get; set; }
+        public DateOnly RepresentativeBirthDate { get; set; }
+        public string RepresentativeBirthPlace { get; set; }
+        public string RepresentativeAddress { get; set; }
+        public string RepresentativePesel { get; set; }
+        public int RepresentativePhone { get; set; }
+        public string RepresentativeEmail { get; set; }
+        public string RepresentativeIdNumber { get; set; }
+        public byte[] RepresentativeIdScan { get; set; }
+        public string Password { get; set; }
+        public int VerificationToken { get; set; }
+        public int CustomerNumber { get; set; }
+        public DateTime CreationTime { get; set; }
     }
 }

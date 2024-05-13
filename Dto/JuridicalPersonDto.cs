@@ -1,6 +1,7 @@
-﻿using bankingApplication_API.Controllers;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+
+using bankingApplication_API.Controllers;
 
 namespace bankingApplication_API.Models
 {

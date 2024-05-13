@@ -14,7 +14,7 @@ namespace bankingApplication_API.Repository
         }
 
         public ICollection<JuridicalPerson> GetJuridicalPersons() {
-            return _context.juridicalPerson.OrderBy( np => np.id ).ToList();
+            return _context.juridicalPerson.OrderBy( np => np.Id ).ToList();
         }
 
         public void CreateJuridicalPerson(JuridicalPerson juridicalPerson)
@@ -25,29 +25,29 @@ namespace bankingApplication_API.Repository
 
         public bool JuridicalPersonExists(int id)
         {
-            return _context.juridicalPerson.Any(np => np.id == id);
+            return _context.juridicalPerson.Any(np => np.Id == id);
         }
 
         public JuridicalPerson GetJuridicalPersonByID(int id)
         {
-            return _context.juridicalPerson.Where(np => np.id == id).FirstOrDefault();
+            return _context.juridicalPerson.Where(np => np.Id == id).FirstOrDefault();
         }
 
         public bool VerificationTokenExists(int newToken)
         {
-            var person = _context.juridicalPerson.SingleOrDefault(p => p.verificationToken == newToken);
+            var person = _context.juridicalPerson.SingleOrDefault(p => p.VerificationToken == newToken);
             return person != null;
         }
 
         public bool customerNumberExists(int customerNumber)
         {
-            var person = _context.juridicalPerson.SingleOrDefault(p => p.customerNumber == customerNumber);
+            var person = _context.juridicalPerson.SingleOrDefault(p => p.CustomerNumber == customerNumber);
             return person != null;
         }
 
         public JuridicalPerson FindCustomerNumber(int customerNumber) //if return null, customer number is wrong
         {
-            JuridicalPerson juridicalPerson = _context.juridicalPerson.Where(np => np.customerNumber == customerNumber).FirstOrDefault();
+            JuridicalPerson juridicalPerson = _context.juridicalPerson.Where(np => np.CustomerNumber == customerNumber).FirstOrDefault();
             return juridicalPerson;
         }
     }
