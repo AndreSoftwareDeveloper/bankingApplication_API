@@ -1,5 +1,6 @@
-﻿using bankingApplication_API.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+
+using bankingApplication_API.Models;
 
 namespace bankingApplication_API.Controllers
 {
@@ -22,7 +23,6 @@ namespace bankingApplication_API.Controllers
             System.IO.File.AppendAllText(transactionHistoryFile, newLine);
             var filePath = Path.GetFullPath(transactionHistoryFile);
             return Created(filePath, "Transaction history updated successfully.");
-
         }
     }
 }

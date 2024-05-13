@@ -1,5 +1,5 @@
-﻿using bankingApplication_API.Controllers;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using bankingApplication_API.Controllers;
 
 namespace bankingApplication_API.Dto
 {

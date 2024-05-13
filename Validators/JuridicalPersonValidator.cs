@@ -1,6 +1,5 @@
-﻿using bankingApplication_API.Helper;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
+﻿using System.Globalization;
+using bankingApplication_API.Helper;
 
 namespace bankingApplication_API.Validators
 {

@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+
 using bankingApplication_API.Dto;
 using bankingApplication_API.Interfaces;
 using bankingApplication_API.Models;
 using bankingApplication_API.Services;
 using bankingApplication_API.Validators;
-using Microsoft.AspNetCore.Mvc;
 
 namespace bankingApplication_API.Controllers
 {
