@@ -11,7 +11,6 @@ namespace bankingApplication_API.Dto
 
         [JsonConverter(typeof(DateOnlyConverter))]
         public DateOnly BirthDate { get; set; }
-
         public string BirthPlace { get; set; }
         public string Address { get; set; }
         public string Pesel { get; set; }

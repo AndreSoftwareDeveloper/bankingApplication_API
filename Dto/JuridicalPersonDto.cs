@@ -21,7 +21,6 @@ namespace bankingApplication_API.Models
 
         [NotMapped]
         public IFormFile CompanyAgreement { get; set; }
-
         public string RepresentativeFirstName { get; set; }
         public string RepresentativeLastName { get; set; }
 
@@ -36,7 +35,6 @@ namespace bankingApplication_API.Models
 
         [NotMapped]
         public IFormFile RepresentativeIdScan { get; set; }
-
         public string Password { get; set; } = "temporary_password";
         public int VerificationToken { get; set; } = UniqueNumberGenerator.GenerateVerificationToken(typeof(JuridicalPersonController));
         public int CustomerNumber { get; set; } = UniqueNumberGenerator.GenerateCustomerNumber(typeof(JuridicalPersonController));
