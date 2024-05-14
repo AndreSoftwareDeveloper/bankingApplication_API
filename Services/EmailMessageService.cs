@@ -30,9 +30,14 @@ namespace bankingApplication_API.Services
 
         public static void SendEmail(string emailHeader, string emailContent, string receiver)
         {
-            EmailCredentials credentials = LoadSecrets();   
-            SmtpClient smtp = new SmtpClient();
+            EmailCredentials credentials = LoadSecrets();
+            MailAddress from = new MailAddress(credentials.Address);
+            MailAddress to = new MailAddress(receiver);
+            MailMessage email = new MailMessage(from, to);
+            email.Subject = emailHeader;
+            email.Body = emailContent;
 
+            SmtpClient smtp = new SmtpClient();
             smtp.Host = "smtp.wp.pl"; //gmail has security policy, that prevents automatically sending an email from api, while wp.pl is ok
             smtp.UseDefaultCredentials = false;
             smtp.Port = 587;
@@ -42,12 +47,6 @@ namespace bankingApplication_API.Services
 
             try
             {
-                MailAddress from = new MailAddress(credentials.Address);
-                MailAddress to = new MailAddress(receiver);
-                MailMessage email = new MailMessage(from, to);
-
-                email.Subject = emailHeader;
-                email.Body = emailContent;
                 smtp.Send(email);
             }
             catch (SmtpException ex)
@@ -59,7 +58,6 @@ namespace bankingApplication_API.Services
         public static EmailCredentials LoadSecrets()
         {
             string secretsPath = "Secrets\\EmailCredentials.json";
-
             try
             {
                 string secrets = File.ReadAllText(secretsPath);
