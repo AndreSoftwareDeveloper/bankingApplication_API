@@ -1,8 +1,17 @@
-Secrets/
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Logs
 Logs/
-bin/
-obj/
-.vs/
-history.csv
-*.user
+
+# HTTP request files
 *.http
+
+# Visual Studio 2022 cache/options directory
+.vs/
+
+# User-specific files
+*.user
+Secrets/
+history.csv
