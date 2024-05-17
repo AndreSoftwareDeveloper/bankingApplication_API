@@ -68,7 +68,7 @@ namespace bankingApplication_API.Controllers
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(NaturalPersonDto))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> CreateNaturalPerson([FromForm] NaturalPersonDto naturalPersonDto)
+        public IActionResult CreateNaturalPerson([FromForm] NaturalPersonDto naturalPersonDto)
         {
             if (naturalPersonDto == null)
                 return BadRequest("Invalid data.");
