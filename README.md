@@ -18,6 +18,7 @@ Run migrations to create new database schema:
 
 To build the API run the following command:  
 `dotnet run`  
+
 The API will be available at https://localhost:5162
 
 ## Endpoints
