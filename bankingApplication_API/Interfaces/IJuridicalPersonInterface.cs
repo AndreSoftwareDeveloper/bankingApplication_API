@@ -9,7 +9,7 @@ namespace bankingApplication_API.Interfaces
         public bool JuridicalPersonExists(int id);
         public JuridicalPerson GetJuridicalPersonByID(int id);
         public bool VerificationTokenExists(int newToken);
-        public bool customerNumberExists(int customerNumber);
+        public bool CustomerNumberExists(int customerNumber);
         public JuridicalPerson FindCustomerNumber(int customerNumber);
     }
 }

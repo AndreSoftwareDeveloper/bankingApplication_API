@@ -39,7 +39,7 @@ namespace bankingApplication_API.Repository
             return person != null;
         }
 
-        public bool customerNumberExists(int customerNumber)
+        public bool CustomerNumberExists(int customerNumber)
         {
             var person = _context.juridicalPerson.SingleOrDefault(p => p.CustomerNumber == customerNumber);
             return person != null;

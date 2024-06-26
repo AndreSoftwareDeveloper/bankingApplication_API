@@ -13,7 +13,7 @@ namespace bankingApplication_API.Interfaces
 
         public void CreateNaturalPerson(NaturalPerson naturalPerson);
         public bool VerificationTokenExists(int newToken);
-        public bool customerNumberExists(int customerNumber);
+        public bool CustomerNumberExists(int customerNumber);
         public NaturalPerson SetupNaturalPersonData(NaturalPersonUpdateData updateData);
     }
 }

@@ -17,6 +17,7 @@ namespace bankingApplication_API.Repository
         {
             return _context.naturalPerson.Where(np => np.LastName == LastName).FirstOrDefault();
         }
+
         public NaturalPerson GetNaturalPersonByID(int id)
         {
             return _context.naturalPerson.Where(np => np.Id == id).FirstOrDefault();
@@ -26,6 +27,7 @@ namespace bankingApplication_API.Repository
         {
             return _context.naturalPerson.Where(np => np.Pesel == pesel).FirstOrDefault();
         }
+
         public NaturalPerson FindCustomerNumber(int customerNumber) //if return null, customer number is wrong
         {
             NaturalPerson naturalPerson = _context.naturalPerson.Where(np => np.CustomerNumber == customerNumber).FirstOrDefault();
@@ -35,6 +37,7 @@ namespace bankingApplication_API.Repository
         public ICollection<NaturalPerson> GetNaturalPersons() {
             return _context.naturalPerson.OrderBy( np => np.Id ).ToList();
         }
+
         public void CreateNaturalPerson(NaturalPerson naturalPerson) {
             _context.naturalPerson.Add(naturalPerson);
             _context.SaveChanges();
@@ -50,7 +53,7 @@ namespace bankingApplication_API.Repository
             return person != null;
         }
 
-        public bool customerNumberExists(int customerNumber)
+        public bool CustomerNumberExists(int customerNumber)
         {
             var person = _context.naturalPerson.SingleOrDefault(p => p.CustomerNumber == customerNumber);
             return person != null;

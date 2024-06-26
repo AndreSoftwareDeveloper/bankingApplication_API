@@ -12,16 +12,14 @@ namespace bankingApplication_API
             {
                 verificationToken = random.Next();
 
-                if (controllerType == typeof(NaturalPersonController))
-                {
+                if (controllerType == typeof(NaturalPersonController))                
                     if (!NaturalPersonController._naturalPersonInterface.VerificationTokenExists(verificationToken))
                         return verificationToken; //none of existing verification tokens is equals to the newly created one
-                }
-                else if (controllerType == typeof(JuridicalPersonController))
-                {
+                
+                else if (controllerType == typeof(JuridicalPersonController))                
                     if (!JuridicalPersonController._juridicalPersonInterface.VerificationTokenExists(verificationToken))
                         return verificationToken; //none of existing verification tokens is equals to the newly created one
-                }
+                
             } while (true);
         }
 
@@ -34,16 +32,13 @@ namespace bankingApplication_API
             {
                 customerNumber = random.Next();
 
-                if (controllerType == typeof(NaturalPersonController))
-                {
-                    if (!NaturalPersonController._naturalPersonInterface.customerNumberExists(customerNumber))
+                if (controllerType == typeof(NaturalPersonController))                
+                    if (!NaturalPersonController._naturalPersonInterface.CustomerNumberExists(customerNumber))
                         return customerNumber; //none of existing customer numbers is equals to the newly created one
-                }
-                else if (controllerType == typeof(JuridicalPersonController))
-                {
-                    if (!JuridicalPersonController._juridicalPersonInterface.customerNumberExists(customerNumber))
-                        return customerNumber; //none of existing customer numbers is equals to the newly created one
-                }
+                
+                else if (controllerType == typeof(JuridicalPersonController))                
+                    if (!JuridicalPersonController._juridicalPersonInterface.CustomerNumberExists(customerNumber))
+                        return customerNumber; //none of existing customer numbers is equals to the newly created one                
 
             } while (true);
         }
