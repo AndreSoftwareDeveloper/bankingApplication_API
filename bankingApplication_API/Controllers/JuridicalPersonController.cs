@@ -21,7 +21,6 @@ namespace bankingApplication_API.Controllers
             _mapper = mapper;
         }
 
-
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<JuridicalPerson>))]
         [ProducesResponseType(400)]
@@ -33,7 +32,6 @@ namespace bankingApplication_API.Controllers
                 return BadRequest(ModelState);
             return Ok(juridicalPersons);
         }
-
 
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(JuridicalPerson))]
@@ -49,8 +47,7 @@ namespace bankingApplication_API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(juridicalPerson);
-        }
-        
+        }        
 
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(JuridicalPersonDto))]
@@ -89,7 +86,6 @@ namespace bankingApplication_API.Controllers
             return CreatedAtAction(nameof(GetJuridicalPerson), new { juridicalPerson.Id }, juridicalPerson);
         }
 
-
         [HttpGet("customerNumber/{customerNumber}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -100,7 +96,6 @@ namespace bankingApplication_API.Controllers
                 return NotFound();
             return Ok(juridicalPerson);
         }
-
 
         private uniqueConstraintViolation dataExist(ICollection<JuridicalPerson> juridicalPerson, string companyName, long nip,
             long regon, int phone, string email)
