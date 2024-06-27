@@ -94,6 +94,7 @@ namespace bankingApplication_API.Controllers
         }
 
         [HttpPatch]
+        [Consumes("application/json")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public IActionResult SetupNaturalPersonData([FromBody] NaturalPersonUpdateData updateData)
