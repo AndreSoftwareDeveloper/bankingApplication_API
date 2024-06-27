@@ -64,7 +64,7 @@ namespace bankingApplication_API.Controllers
             var juridicalPerson = _mapper.Map<JuridicalPerson>(validator);
             ICollection<JuridicalPerson> juridicalPersons = _juridicalPersonInterface.GetJuridicalPersons();
 
-            switch (dataExist(juridicalPersons, juridicalPerson.CompanyName, juridicalPerson.Nip, juridicalPerson.Regon, juridicalPerson.Phone, juridicalPerson.Email, juridicalPerson.EntryKRS, juridicalPerson.CompanyAgreement))
+            switch (dataExist(juridicalPersons, juridicalPerson.CompanyName, juridicalPerson.Nip, juridicalPerson.Regon, juridicalPerson.Phone, juridicalPerson.Email))
             {
                 case uniqueConstraintViolation.companyName:
                     return BadRequest("companyName");
@@ -103,7 +103,7 @@ namespace bankingApplication_API.Controllers
 
 
         private uniqueConstraintViolation dataExist(ICollection<JuridicalPerson> juridicalPerson, string companyName, long nip,
-            long regon, int phone, string email, byte[] entryKRS, byte[] companyAgreement)
+            long regon, int phone, string email)
         {
             uniqueConstraintViolation violation = uniqueConstraintViolation.none;
 
