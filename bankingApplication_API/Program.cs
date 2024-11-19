@@ -37,14 +37,12 @@ builder.Services.AddScoped<IJuridicalPersonInterface, JuridicalPersonRepository>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = "Data Source=(local);Initial Catalog=Bank;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;MultiSubnetFailover=False\r\n";
+var connectionString = "Data Source=(local);Initial Catalog=Bank;Integrated Security=True;Connect Timeout=30;Encrypt=False;" +
+    "Trust Server Certificate=False;Application Intent=ReadWrite;MultiSubnetFailover=False\r\n";
 
 try
 {
-    builder.Services.AddDbContext<DataContext>(options =>
-    {
-        options.UseSqlServer(connectionString);
-    });
+    builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 }
 catch (Exception ex)
 {
@@ -54,11 +52,7 @@ catch (Exception ex)
     Environment.Exit(1);
 }
 
-builder.Services.Configure<FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = long.MaxValue;
-});
-
+builder.Services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = long.MaxValue);
 builder.Services.AddMvc().AddMvcOptions(options =>
 {
     options.EnableEndpointRouting = false;
@@ -91,7 +85,10 @@ using (var scope = app.Services.CreateScope())
     {
         // Use reflection to get DbSet properties from the DbContext
         var dbSetProperties = dbContext.GetType().GetProperties()
-            .Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
+            .Where(
+                p => p.PropertyType.IsGenericType 
+                    && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>)
+            );
 
         foreach (var property in dbSetProperties)
         {
