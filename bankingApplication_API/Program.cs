@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using bankingApplication_API.Data;
 using bankingApplication_API.Interfaces;
 using bankingApplication_API.Repository;
+using System.Reflection;
 
 // WebApplication - a class representing the main application object.
 // It aggregates various components and functions that are frequently used in a web application configuration.
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-var loggerFactory = LoggerFactory.Create(builder => builder.AddFile("Logs/log_{Date}.txt"));
-var _logger = loggerFactory.CreateLogger<Program>();
+ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddFile("Logs/log_{Date}.txt"));
+ILogger<Program> _logger = loggerFactory.CreateLogger<Program>();
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -37,7 +38,7 @@ builder.Services.AddScoped<IJuridicalPersonInterface, JuridicalPersonRepository>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = "Data Source=(local);Initial Catalog=Bank;Integrated Security=True;Connect Timeout=30;Encrypt=False;" +
+string connectionString = "Data Source=(local);Initial Catalog=Bank;Integrated Security=True;Connect Timeout=30;Encrypt=False;" +
     "Trust Server Certificate=False;Application Intent=ReadWrite;MultiSubnetFailover=False\r\n";
 
 try
@@ -59,7 +60,7 @@ builder.Services.AddMvc().AddMvcOptions(options =>
     options.Filters.Add(new ConsumesAttribute("multipart/form-data"));
 });
 
-var app = builder.Build(); //builds instance of WebApplication from WebApplicationBuilder's object
+WebApplication app = builder.Build(); //builds instance of WebApplication from WebApplicationBuilder's object
 
 // Configure the HTTP request pipeline.
 // Defines how the app handles incoming HTTP requests. 
@@ -76,24 +77,24 @@ app.UseRouting();
 app.UseAuthorization();
 app.UseMvc();
 
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    var serviceProvider = scope.ServiceProvider;
-    var dbContext = serviceProvider.GetRequiredService<DataContext>();
+    IServiceProvider serviceProvider = scope.ServiceProvider;
+    DataContext dbContext = serviceProvider.GetRequiredService<DataContext>();
 
     try
     {
         // Use reflection to get DbSet properties from the DbContext
-        var dbSetProperties = dbContext.GetType().GetProperties()
+        IEnumerable<PropertyInfo> dbSetProperties = dbContext.GetType().GetProperties()
             .Where(
                 p => p.PropertyType.IsGenericType 
                     && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>)
             );
 
-        foreach (var property in dbSetProperties)
+        foreach (PropertyInfo property in dbSetProperties)
         {
-            var entityType = property.PropertyType.GetGenericArguments().First();
-            var tableName = dbContext.Model.FindEntityType(entityType).GetTableName();
+            Type entityType = property.PropertyType.GetGenericArguments().First();
+            string tableName = dbContext.Model.FindEntityType(entityType).GetTableName();
         }
     }
     catch (Exception ex)
