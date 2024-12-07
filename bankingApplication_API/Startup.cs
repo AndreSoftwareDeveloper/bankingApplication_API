@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+
 using bankingApplication_API.Data;
 using bankingApplication_API.Interfaces;
 using bankingApplication_API.Repository;
@@ -39,19 +40,33 @@ public static class StartupExtensions
         services.AddSwaggerGen();
 
         // Database context
-        string connectionString = "Data Source=(local);Initial Catalog=Bank;Integrated Security=True;Connect Timeout=30;Encrypt=False;" +
-            "Trust Server Certificate=False;Application Intent=ReadWrite;MultiSubnetFailover=False\r\n";
+        string connectionString = "Data Source=(local);" +
+            "Initial Catalog=Bank;" +
+            "Integrated Security=True;" +
+            "Connect Timeout=30;" +
+            "Encrypt=False;" +
+            "Trust Server Certificate=False;" +
+            "Application Intent=ReadWrite;" +
+            "MultiSubnetFailover=False\r\n";
 
-        services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+        services.AddDbContext<DataContext>(
+            options => options.UseSqlServer(connectionString)
+        );
 
         // Configure FormOptions for file uploads
-        services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = long.MaxValue);
+        services.Configure<FormOptions>(
+            options => options.MultipartBodyLengthLimit = long.MaxValue
+        );
 
         // MVC
-        services.AddMvc().AddMvcOptions(options =>
-        {
-            options.EnableEndpointRouting = false;
-            options.Filters.Add(new ConsumesAttribute("multipart/form-data"));
-        });
+        services.AddMvc().AddMvcOptions(
+            options =>
+            {
+                options.EnableEndpointRouting = false;
+                options.Filters.Add(
+                    new ConsumesAttribute("multipart/form-data")
+                );
+            }
+        );
     }
 }
