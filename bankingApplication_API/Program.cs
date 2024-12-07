@@ -1,14 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using bankingApplication_API.Data;
-using bankingApplication_API.Interfaces;
-using bankingApplication_API.Repository;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddFile("Logs/log_{Date}.txt"));
+ILoggerFactory loggerFactory = LoggerFactory.Create(
+    builder => builder.AddFile("Logs/log_{Date}.txt")
+);
 ILogger<Program> _logger = loggerFactory.CreateLogger<Program>();
 
 // Add services to the container.
